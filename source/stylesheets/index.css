@@ -1,0 +1,59 @@
+
+.background {
+  height: 100vh;
+  width: 100vw;
+  background: #191970; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(#191970, #483D8B); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#191970, #483D8B); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#191970, #483D8B); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#191970, #483D8B); /* Standard syntax */
+}
+
+.stars {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: white;
+}
+
+input[type=text] {
+  font-family: 'Itim', cursive;
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  border-radius: 4px;
+  width: 400px;
+  height: 48px;
+  font-size: 38px;
+  outline-width: 0;
+  text-align: center;
+}
+
+.username {
+  width: 500px;
+  height: 10px;
+
+  position: absolute;
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: auto;
+}
+
+.username-title {
+  font-family: 'Itim', cursive;
+  color: white;
+  font-size: 32px;
+}
+
+.button {
+  background-color: transparent;
+  color: white;
+  font-family: 'Itim', cursive;
+  font-size: 28px;
+  height: 40px;
+  border: 2px solid white;
+  border-radius: 4px;
+}
