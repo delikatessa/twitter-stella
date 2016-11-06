@@ -1,24 +1,27 @@
 
 var twitter = require('twitter');
 var express = require('express');
+var path = require('path');
 
 var app = express();
 
 var router = express.Router();
 
+app.use(express.static(path.join(__dirname, 'public')));
 var routes = function() {
     router.get('/',
         function(req, res) {
-            res.sendFile('index.html');
+            res.sendFile('public/index.html');
         });
     router.post('/',
         function(req, res) {
             GetTwitterImages('althaire');
         }
     );
+  return router;
 }
 
-app.use('/', routes);
+app.use('/', routes());
 
 app.listen(3000, function () {
     console.log('listening');
@@ -49,7 +52,7 @@ function GetTwitterImages(username, next) {
             }
         });
         console.log(tweets.length + ':' + fotos.length);
-    }); 
+    });
     next();
 }
 
