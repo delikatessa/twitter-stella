@@ -22,7 +22,13 @@ var routes = function() {
   router.post('/',
     function(req, res) {
       GetTwitterImages(req.body.uname, function(fotos) {
-        console.log(fotos);
+
+        fotos.forEach(function (foto) {
+          var cloudVisionClient = require('./lib/cloudVisionClient')();
+          cloudVisionClient.detectImageURL(foto, function(error, body) {
+            console.log(JSON.stringify(body.responses));
+          });
+        });
       });
     }
   );
