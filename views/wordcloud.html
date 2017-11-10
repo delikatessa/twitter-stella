@@ -1,0 +1,22 @@
+<html>
+<link rel="stylesheet" type="text/css" href="./stylesheets/index.css" media="screen" />
+<link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet">
+<script src="./javascripts/stars.js"></script>
+<script>
+var words = JSON.parse(("<%= words %>").replace(/&#34;/g, "\""));
+</script>
+<script src="./javascripts/wordcloud2.js"></script>
+<script src="./javascripts/showWordCloud.js"></script>
+
+<head>
+  <title>Twitter Stella</title>
+</head>
+
+<body class="background">
+  <div id="num_of_dots" value="0">
+  </div>
+  <h1 class="twitter">@<%= twitter %></h1>
+  <div id="word-cloud-canvas" height="800" width="1440"></div>
+</body>
+
+</html>

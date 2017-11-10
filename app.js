@@ -1,4 +1,7 @@
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').load();
+}
 var twitter = require('twitter');
 var express = require('express');
 var path = require('path');
@@ -13,6 +16,10 @@ app.use(bodyParser.urlencoded({
 
 var router = express.Router();
 
+app.engine('.html', require('ejs').__express);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'html');
+
 app.use(express.static(path.join(__dirname, 'public')));
 var routes = function() {
   router.get('/',
@@ -23,12 +30,23 @@ var routes = function() {
     function(req, res) {
       GetTwitterImages(req.body.uname, function(fotos) {
 
-        fotos.forEach(function (foto) {
+        var words = [];
+        var processedFotos = 0;
+        for(var foto of fotos) {
           var cloudVisionClient = require('./lib/cloudVisionClient')();
           cloudVisionClient.detectImageURL(foto, function(error, body) {
-            console.log(JSON.stringify(body.responses));
+            body["responses"][0]["labelAnnotations"].forEach(function (guess) {
+              ProcessWord(words, guess["description"]);
+            });
+            processedFotos++;
+            if(processedFotos == fotos.length) {
+              words.sort(function (a, b) {
+                return b.count - a.count;
+              });
+              res.render('wordcloud', {twitter: req.body.uname, words: JSON.stringify(words)});
+            }
           });
-        });
+        };
       });
     }
   );
@@ -42,12 +60,21 @@ app.listen(3000, function () {
 });
 
 var client = new twitter({
-  consumer_key: '2gsIVrW3EAUKgxcYFn9fNkg9d',//process.env.TWITTER_CONSUMER_KEY,
-  consumer_secret: 'si6QlxsDdm2HdeNO1uVIRKWfexIN2ZxWcCd42or4RPdxGVE4DW', //process.env.TWITTER_CONSUMER_SECRET,
-  access_token_key: '119993000-bnph0yrVf8w3JJIrkquLAlFumoDo2aEUKqBEOOcW', //process.env.TWITTER_ACCESS_TOKEN_KEY,
-  access_token_secret: 'Vo4EjIZ13uDSzm4OHcc6cmr5uzyWpLhP6dsdkCH4YopUI',//process.env.TWITTER_ACCESS_TOKEN_SECRET,
+  consumer_key: process.env.TWITTER_CONSUMER_KEY,
+  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
 
+function ProcessWord(words, word) {
+  var duplicateWords = words.filter(function(singleWord){ return singleWord[0] === word });
+  if (duplicateWords.length != 0) {
+    duplicateWords[0][1] ++;
+  }
+  else {
+    words.push([word, 1]);
+  }
+}
 function GetTwitterImages(username, next) {
   var params = { screen_name: username, include_entities: true, exclude_replies: true, include_rts: true, count: 200 };
   client.get('statuses/user_timeline', params, function (error, tweets) {
