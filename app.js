@@ -55,7 +55,7 @@ var routes = function() {
 
 app.use('/', routes());
 
-app.listen(3000, function () {
+app.listen(process.env.port || process.env.PORT || 3000, function () {
   console.log('listening');
 });
 
