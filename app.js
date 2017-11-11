@@ -35,9 +35,11 @@ var routes = function() {
         for(var foto of fotos) {
           var cloudVisionClient = require('./lib/cloudVisionClient')();
           cloudVisionClient.detectImageURL(foto, function(error, body) {
-            body["responses"][0]["labelAnnotations"].forEach(function (guess) {
-              ProcessWord(words, guess["description"]);
-            });
+            if (body["responses"][0]["labelAnnotations"] != undefined) {
+              body["responses"][0]["labelAnnotations"].forEach(function (guess) {
+                ProcessWord(words, guess["description"]);
+              });
+            }
             processedFotos++;
             if(processedFotos == fotos.length) {
               words.sort(function (a, b) {
