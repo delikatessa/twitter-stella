@@ -1,4 +1,13 @@
 
+body {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+}
+
 .twitter {
   font-family: 'Itim', cursive;
   color: #3F96FF;
@@ -38,16 +47,7 @@ input[type=text] {
 }
 
 .username {
-  width: 500px;
-  height: 10px;
-
-  position: absolute;
-  top:-150;
-  bottom: 0;
-  left: 0;
-  right: 0;
-
-  margin: auto;
+  text-align: center;
 }
 
 .username-title {
@@ -64,4 +64,5 @@ input[type=text] {
   height: 40px;
   border: 2px solid white;
   border-radius: 4px;
+  margin-top: 10px;
 }
